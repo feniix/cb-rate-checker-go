@@ -1,0 +1,3 @@
+cb-rate-checker-go
+vendor/*
+!vendor/.gitkeep
