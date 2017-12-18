@@ -11,10 +11,15 @@ import (
 	"github.com/fatih/structs"
 	. "github.com/feniix/cb-rate-checker-go/structs"
 	"github.com/shopspring/decimal"
+	flag "github.com/spf13/pflag"
 )
 
 func main() {
-	url := "https://api.coinbase.com/v2/exchange-rates"
+	const url = "https://api.coinbase.com/v2/exchange-rates"
+
+	var currency string
+	flag.StringVarP(&currency, "currency", "c", "", "Ticker symbol of the currency")
+	flag.Parse()
 
 	httpClient := http.Client{
 		Timeout: time.Second * 2,
@@ -44,7 +49,11 @@ func main() {
 
 	rates := structs.Map(&cb.Data.Rates)
 	one := decimal.NewFromFloat(1)
-	eth, _ := decimal.NewFromString(rates["ETH"].(string))
-
-	fmt.Printf("%v\n", one.DivRound(eth, 2))
+	
+	if currency != "" {
+		eth, _ := decimal.NewFromString(rates[currency].(string))
+		fmt.Printf("%v\n", one.DivRound(eth, 2))
+	} else {
+		flag.Usage()
+	}
 }

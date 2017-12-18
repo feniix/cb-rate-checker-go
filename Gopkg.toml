@@ -26,3 +26,6 @@
 [[constraint]]
   name = "github.com/shopspring/decimal"
   revision = "9ca7f5"
+[[constraint]]
+  name = "github.com/spf13/pflag"
+  revision = "4c012f"

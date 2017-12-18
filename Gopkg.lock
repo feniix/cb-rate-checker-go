@@ -12,9 +12,14 @@
   packages = ["."]
   revision = "9ca7f5"
 
+[[projects]]
+  name = "github.com/spf13/pflag"
+  packages = ["."]
+  revision = "4c012f"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c8a96cc81ed424ab3f70f5512b17f2b8b76c6925ca40eeda134866234e1444de"
+  inputs-digest = "eb3ff6414f069741e734eec10194310cce026bae92393599a1aad6244a96db7e"
   solver-name = "gps-cdcl"
   solver-version = 1
