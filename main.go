@@ -18,7 +18,7 @@ func main() {
 	const url = "https://api.coinbase.com/v2/exchange-rates"
 
 	var currency string
-	flag.StringVarP(&currency, "currency", "c", "", "Ticker symbol of the currency")
+	flag.StringVarP(&currency, "currency", "c", "", "Ticker symbol of the currency (ETH, LTC, BTC)")
 	flag.Parse()
 
 	httpClient := http.Client{
@@ -50,10 +50,14 @@ func main() {
 	rates := structs.Map(&cb.Data.Rates)
 	one := decimal.NewFromFloat(1)
 	
-	if currency != "" {
+	switch currency {
+	case
+		"ETH",
+		"BTC",
+		"LTC":
 		eth, _ := decimal.NewFromString(rates[currency].(string))
 		fmt.Printf("%v\n", one.DivRound(eth, 2))
-	} else {
+	default:
 		flag.Usage()
 	}
 }
