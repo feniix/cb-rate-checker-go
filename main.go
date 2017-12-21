@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/fatih/structs"
-	. "github.com/feniix/cb-rate-checker-go/structs"
+	S "github.com/feniix/cb-rate-checker-go/structs"
 	"github.com/shopspring/decimal"
 	flag "github.com/spf13/pflag"
 )
@@ -41,7 +41,7 @@ func main() {
 		log.Fatal(readErr)
 	}
 
-	cb := Coinbase{}
+	cb := S.Coinbase{}
 	jsonErr := json.Unmarshal(body, &cb)
 	if jsonErr != nil {
 		log.Fatal(jsonErr)
@@ -49,7 +49,7 @@ func main() {
 
 	rates := structs.Map(&cb.Data.Rates)
 	one := decimal.NewFromFloat(1)
-	
+
 	switch currency {
 	case
 		"ETH",
