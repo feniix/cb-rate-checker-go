@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/fatih/structs"
-	S "github.com/feniix/cb-rate-checker-go/structs"
+	mappings "github.com/feniix/cb-rate-checker-go/structs"
 	"github.com/shopspring/decimal"
 	flag "github.com/spf13/pflag"
 )
@@ -18,7 +18,7 @@ func main() {
 	const url = "https://api.coinbase.com/v2/exchange-rates"
 
 	var currency string
-	flag.StringVarP(&currency, "currency", "c", "", "Ticker symbol of the currency (ETH, LTC, BTC)")
+	flag.StringVarP(&currency, "currency", "c", "", "Ticker symbol of the currency (ETH, LTC, BTC, BCH)")
 	flag.Parse()
 
 	httpClient := http.Client{
@@ -41,7 +41,7 @@ func main() {
 		log.Fatal(readErr)
 	}
 
-	cb := S.Coinbase{}
+	cb := mappings.Coinbase{}
 	jsonErr := json.Unmarshal(body, &cb)
 	if jsonErr != nil {
 		log.Fatal(jsonErr)
@@ -54,7 +54,8 @@ func main() {
 	case
 		"ETH",
 		"BTC",
-		"LTC":
+		"LTC",
+		"BCH":
 		eth, _ := decimal.NewFromString(rates[currency].(string))
 		fmt.Printf("%v\n", one.DivRound(eth, 2))
 	default:
