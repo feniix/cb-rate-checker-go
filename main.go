@@ -45,7 +45,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-=======
 	cb := coinbase{}
 	err = json.Unmarshal(body, &cb)
 	if err != nil {
