@@ -6,49 +6,56 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
-	"github.com/fatih/structs"
-	mappings "github.com/feniix/cb-rate-checker-go/structs"
-	"github.com/shopspring/decimal"
 	flag "github.com/spf13/pflag"
 )
 
-func main() {
-	const url = "https://api.coinbase.com/v2/exchange-rates"
+type coinbase struct {
+	Data struct {
+		Rates    map[string]string `json:"rates"`
+	} `json:"data"`
+}
 
-	var currency string
-	flag.StringVarP(&currency, "currency", "c", "", "Ticker symbol of the currency (ETH, LTC, BTC, BCH)")
+func main() {
+	const url = "https://api.coinbase.com/v2/exchange-rates?currency=%s"
+
+	var currency, baseCurrency string
+	flag.StringVarP(&currency, "currency", "c", "", "Ticker symbol of the currency (ETH, LTC, BTC)")
+	flag.StringVarP(&baseCurrency, "base", "b", "USD", "Base currency to compare against")
 	flag.Parse()
 
 	httpClient := http.Client{
 		Timeout: time.Second * 2,
 	}
 
-	req, err := http.NewRequest(http.MethodGet, url, nil)
-
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf(url, currency), nil)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	res, getErr := httpClient.Do(req)
-	if getErr != nil {
-		log.Fatal(getErr)
+	res, err := httpClient.Do(req)
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	body, readErr := ioutil.ReadAll(res.Body)
-	if readErr != nil {
-		log.Fatal(readErr)
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	cb := mappings.Coinbase{}
-	jsonErr := json.Unmarshal(body, &cb)
-	if jsonErr != nil {
-		log.Fatal(jsonErr)
+=======
+	cb := coinbase{}
+	err = json.Unmarshal(body, &cb)
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	rates := structs.Map(&cb.Data.Rates)
-	one := decimal.NewFromFloat(1)
+	exchanged, err := strconv.ParseFloat(cb.Data.Rates[baseCurrency], 64)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	switch currency {
 	case
@@ -56,8 +63,7 @@ func main() {
 		"BTC",
 		"LTC",
 		"BCH":
-		eth, _ := decimal.NewFromString(rates[currency].(string))
-		fmt.Printf("%v\n", one.DivRound(eth, 2))
+		fmt.Printf("%.2f\n", exchanged)
 	default:
 		flag.Usage()
 	}

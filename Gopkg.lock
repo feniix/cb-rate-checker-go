@@ -2,17 +2,6 @@
 
 
 [[projects]]
-  name = "github.com/fatih/structs"
-  packages = ["."]
-  revision = "a720dfa8df582c51dee1b36feabb906bde1588bd"
-  version = "v1.0"
-
-[[projects]]
-  name = "github.com/shopspring/decimal"
-  packages = ["."]
-  revision = "9ca7f5"
-
-[[projects]]
   name = "github.com/spf13/pflag"
   packages = ["."]
   revision = "4c012f"
@@ -20,6 +9,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "eb3ff6414f069741e734eec10194310cce026bae92393599a1aad6244a96db7e"
+  inputs-digest = "f3d81deb9ca4c669074fb6d1d941c8e43dabfdf5d722ca2b6ad6de9812762afe"
   solver-name = "gps-cdcl"
   solver-version = 1
