@@ -6,10 +6,10 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strconv"
 	"time"
 
 	flag "github.com/spf13/pflag"
+	"os"
 )
 
 type coinbase struct {
@@ -23,13 +23,17 @@ func main() {
 
 	var currency, baseCurrency string
 	flag.StringVarP(&currency, "currency", "c", "", "Ticker symbol of the currency (ETH, LTC, BTC)")
-	flag.StringVarP(&baseCurrency, "base", "b", "USD", "Base currency to compare against")
+	flag.StringVarP(&baseCurrency, "base", "b", "USD", "Base currency used to express the price")
 	flag.Parse()
 
 	httpClient := http.Client{
 		Timeout: time.Second * 2,
 	}
 
+	if currency == "" {
+		flag.Usage()
+		os.Exit(1)
+	}
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf(url, currency), nil)
 	if err != nil {
 		log.Fatal(err)
@@ -51,10 +55,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	exchanged, err := strconv.ParseFloat(cb.Data.Rates[baseCurrency], 64)
-	if err != nil {
-		log.Fatal(err)
-	}
+	exchanged := cb.Data.Rates[baseCurrency]
 
 	switch currency {
 	case
@@ -62,8 +63,9 @@ func main() {
 		"BTC",
 		"LTC",
 		"BCH":
-		fmt.Printf("%.2f\n", exchanged)
+		fmt.Printf("%s\n", exchanged)
 	default:
 		flag.Usage()
+		os.Exit(1)
 	}
 }
