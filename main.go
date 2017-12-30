@@ -6,15 +6,15 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	flag "github.com/spf13/pflag"
-	"os"
 )
 
 type coinbase struct {
 	Data struct {
-		Rates    map[string]string `json:"rates"`
+		Rates map[string]string `json:"rates"`
 	} `json:"data"`
 }
 

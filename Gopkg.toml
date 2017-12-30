@@ -21,11 +21,5 @@
 #  version = "2.4.0"
 
 [[constraint]]
-  name = "github.com/fatih/structs"
-  version = "v1.0.0"
-[[constraint]]
-  name = "github.com/shopspring/decimal"
-  revision = "9ca7f5"
-[[constraint]]
   name = "github.com/spf13/pflag"
   revision = "4c012f"

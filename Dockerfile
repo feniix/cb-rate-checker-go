@@ -15,7 +15,7 @@ RUN \
   dep status && \
   CGO_ENABLED=0 GOOS=linux go build -a -ldflags '-extldflags "-static"' .
 
-FROM alpine:3.6
+FROM alpine:3.7
 
 RUN apk add --no-cache ca-certificates
 
